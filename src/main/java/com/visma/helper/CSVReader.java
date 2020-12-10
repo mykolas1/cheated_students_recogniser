@@ -1,6 +1,7 @@
 package com.visma.helper;
 
 import com.visma.dto.Student;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,13 +14,15 @@ import java.util.Map;
 /**
  * CSV format file reader.
  */
-public class CSVReader {
+@Component
+public class CSVReader implements Reader {
 
     /**
      * Parses students with sitting location and answers from csv file.
      * @return
      */
-    public static List<Student> parse() {
+    @Override
+    public List<Student> parse() {
 
         String csvFile = "src/main/resources/results.csv";
         String line = "";
@@ -52,7 +55,7 @@ public class CSVReader {
      * @param studentResult array of student's data.
      * @return answers map.
      */
-    private static Map<Integer, String> parseAnswers(String[] studentResult) {
+    private Map<Integer, String> parseAnswers(String[] studentResult) {
         Map<Integer, String> answers = new HashMap<>();
 
         for (int i = 2; i<studentResult.length; i++)

@@ -2,10 +2,12 @@ package com.visma.component;
 
 import com.visma.dto.Student;
 import com.visma.helper.StudentHelper;
+import com.visma.helper.StudentHelperImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -23,6 +25,9 @@ public class RecogniseCheaterImplTest {
     @InjectMocks
     private RecogniseCheaterImpl recogniseCheater;
 
+    @Mock
+    private StudentHelper studentHelper;
+
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -32,7 +37,7 @@ public class RecogniseCheaterImplTest {
     public void recogniseCheater_AllAnswersCorrect() {
 
         Student student = new Student();
-        Map<Integer, String> correctAnswers = StudentHelper.getCorrectAnswers();
+        Map<Integer, String> correctAnswers = getCorrectAnswers();
         student.setAnswers(correctAnswers);
         student.setCheater(false);
         recogniseCheater.recogniseCheater(student, correctAnswers);
@@ -46,7 +51,6 @@ public class RecogniseCheaterImplTest {
         setAnswers(student);
         setAnswers(neighbor);
         student.getNeighbours().add(neighbor);
-
 
         Map<Integer, String> correctAnswers = getCorrectAnswers();
 
@@ -76,7 +80,7 @@ public class RecogniseCheaterImplTest {
 
 
     private void setAnswers (Student student) {
-        Map<Integer, String> answers = StudentHelper.getCorrectAnswers();
+        Map<Integer, String> answers = getCorrectAnswers();
         answers.put(1, "1");
         answers.put(2, "2");
         answers.put(3, "3");

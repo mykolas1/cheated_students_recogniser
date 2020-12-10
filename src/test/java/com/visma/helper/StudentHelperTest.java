@@ -1,8 +1,11 @@
 package com.visma.helper;
 
 import com.visma.dto.Student;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -16,20 +19,28 @@ import static org.junit.Assert.assertTrue;
 @ExtendWith(MockitoExtension.class)
 public class StudentHelperTest {
 
+    @InjectMocks
+    private StudentHelperImpl studentHelper;
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Test
     public void convertStudentSittingLocationToIntegerCoordinates_Test () {
         Student student = new Student();
         student.setSittingLocation("1.1");
         List<Student> students = new ArrayList<>();
         students.add(student);
-        StudentHelper.convertStudentSittingLocationToIntegerCoordinates(students);
+        studentHelper.convertStudentSittingLocationToIntegerCoordinates(students);
         assertEquals(1, students.get(0).getRow());
         assertEquals(1, students.get(0).getColumn());
     }
 
     @Test
     public void getCorrectAnswers_Test () {
-        Map<Integer, String> correctAnswers = StudentHelper.getCorrectAnswers();
+        Map<Integer, String> correctAnswers = studentHelper.getCorrectAnswers();
         assertEquals("a", correctAnswers.get(1));
         assertEquals("bd", correctAnswers.get(2));
         assertEquals("abef", correctAnswers.get(3));
@@ -56,6 +67,6 @@ public class StudentHelperTest {
         Map<Integer, String> map2 = new HashMap<>();
         map2.put(1, "1");
         map2.put(2, "2");
-        assertTrue(StudentHelper.areEqualMaps(map1, map2));
+        assertTrue(studentHelper.areEqualMaps(map1, map2));
     }
 }

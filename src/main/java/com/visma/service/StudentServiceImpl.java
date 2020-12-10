@@ -3,7 +3,9 @@ package com.visma.service;
 import com.visma.component.RecogniseCheater;
 import com.visma.dto.Student;
 import com.visma.helper.CSVReader;
+import com.visma.helper.Reader;
 import com.visma.helper.StudentHelper;
+import com.visma.helper.StudentHelperImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
 
     private final RecogniseCheater recogniseCheater;
+    private final StudentHelper studentHelper;
+    private final Reader csvReader;
 
     /**
      * Parses all students from an csv file.
@@ -29,9 +33,9 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public List<Student> identifyCheatedStudents() {
-        List<Student> allStudents = CSVReader.parse();
-        StudentHelper.convertStudentSittingLocationToIntegerCoordinates(allStudents);
-        Map<Integer, String> correctAnswers = StudentHelper.getCorrectAnswers();
+        List<Student> allStudents = csvReader.parse();
+        studentHelper.convertStudentSittingLocationToIntegerCoordinates(allStudents);
+        Map<Integer, String> correctAnswers = studentHelper.getCorrectAnswers();
         allStudents.forEach(student -> {
             student.setNeighbours(getStudentNeighbors(student, allStudents));
             recogniseCheater.recogniseCheater(student, correctAnswers);

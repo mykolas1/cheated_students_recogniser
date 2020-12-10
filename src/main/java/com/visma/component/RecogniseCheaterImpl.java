@@ -2,6 +2,7 @@ package com.visma.component;
 
 import com.visma.dto.Student;
 import com.visma.helper.StudentHelper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -18,8 +19,11 @@ import java.util.stream.Collectors;
  *
  * It is impossible to recognise which student wrote down an answer. 1st one or the 2nd one.
  */
+@RequiredArgsConstructor
 @Component
 public class RecogniseCheaterImpl implements RecogniseCheater {
+
+    private final StudentHelper studentHelper;
 
     /**
      * Component entry point to recognise cheater.
@@ -29,7 +33,7 @@ public class RecogniseCheaterImpl implements RecogniseCheater {
      */
     @Override
     public void recogniseCheater(Student student, Map<Integer, String> correctAnswers) {
-        if (StudentHelper.areEqualMaps(student.getAnswers(), correctAnswers)) {
+        if (studentHelper.areEqualMaps(student.getAnswers(), correctAnswers)) {
             return;
         }
         checkAnswersEqualityWithNeighborAnswers(student);
@@ -44,7 +48,7 @@ public class RecogniseCheaterImpl implements RecogniseCheater {
      */
     private void checkAnswersEqualityWithNeighborAnswers (Student student) {
         student.getNeighbours().forEach(neighbour -> {
-            if (StudentHelper.areEqualMaps(student.getAnswers(), neighbour.getAnswers())) {
+            if (studentHelper.areEqualMaps(student.getAnswers(), neighbour.getAnswers())) {
                 student.setCheater(true);
             }
         });
